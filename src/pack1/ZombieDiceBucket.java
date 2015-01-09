@@ -6,9 +6,8 @@ import java.util.ArrayList;
 public class ZombieDiceBucket {
     ArrayList<ZombieDie> dice;
 
-    public ZombieDiceBucket(String name, int colour) {
+    public ZombieDiceBucket() {
         this.dice = new ArrayList<ZombieDie>();
-
     }
 
     void loadBucket() {

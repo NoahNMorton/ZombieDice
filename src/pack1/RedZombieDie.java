@@ -11,13 +11,13 @@ public class RedZombieDie extends ZombieDie {
         int random = ((int) (Math.random() * 6));
         if (random <= 2) //2runner
         {
-            //set value
+            value = ZombieDie.RUNNER;//set value
         } else if (random == 3) //1brain
         {
-            //set value
+            value = ZombieDie.BRAIN; //set value
         } else if (random >= 4) //3shot
         {
-            //set value
+            value = ZombieDie.SHOT; //set value
         }
 
     }
