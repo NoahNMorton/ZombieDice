@@ -6,7 +6,7 @@ public class GreenZombieDie extends ZombieDie {
     public GreenZombieDie(int dieColour) {
         super(dieColour); //todo Calls GreenZombieDie constructor with the text “Green” >help
     }
-
+//test
     void roll() {
         int random = ((int) (Math.random() * 6));
         if (random <= 2) //2runner
