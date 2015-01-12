@@ -21,43 +21,27 @@ public class Mainfile {
             playerNames[e] = input.next();
         }
         shuffleNames(playerNames); //call shuffle to shuffle names.
-        ZombieDiceBucket zdb = new ZombieDiceBucket();
+        ZombieDiceBucket zdb = new ZombieDiceBucket(); //todo what name and colour?
         zdb.loadBucket();
-        //todo play game >might need slight help
+        //todo play game
 
         while (true) {
             for (int i = 0; i < playersAmt; i++) { //turn incrementer
                 int totalPoints = 0; //points to be added to the player at end of turn.
                 boolean turnSuccess = false;
-
-                while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
+                while (!turnSuccess) {
                     String currentPlayer = playerNames[i]; //the player with the current turn
-                    System.out.println("Total brains accumulated: " + totalPoints);
+                    System.out.println("Total points accumulated: " + totalPoints);
                     System.out.println("Player " + currentPlayer + ", Would you like to roll(0), or stop(1)?");
                     int choice = input.nextInt();
                     switch (choice) {
-                        case 0: //roll die, and add points to player score. todo >help
-                            ZombieDie tempDie1 = zdb.draw();
-                            switch (tempDie1.getDieColour()) {
-                                case ZombieDie.RED:
-                                    tempDie1.roll();
-                                    break;
-                                case ZombieDie.GREEN:
-                                    tempDie1.roll();
-                                    break;
-                                case ZombieDie.YELLOW:
-                                    tempDie1.roll();
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points
-                                        totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    }
-                                    break;
-                            }
-                            //maybe write ifs to check colour of draw, then run roll method of respective die todo >check
+                        case 0:
+                            //todo roll die, and add points to player score.
+                            zdb.draw().getDieColour();
+                            //maybe write ifs to check colour of draw, then run roll method of respective die
                             break;
                         case 1: //exit and keep points.
-                            playerScores[i] += totalPoints;
+
                             break;
                         case 3: //secret cheat to view scores of current player
                             System.out.println("Player " + currentPlayer + " has a score of " + playerScores[i]);
@@ -67,8 +51,12 @@ public class Mainfile {
                             break;
                     }
                 }
-                findWinner();
-
+                /*if (findWinner(playerNames, playerScores) != null) {
+                    System.out.println("Player " + findWinner(playerNames, playerScores) + " has won. Congrats!");
+                    System.out.println("Everyone's scores are as follows. ");
+                    //finalResults(playerNames, playerScores);
+                    System.exit(0);
+                }*/
             }
 
         }
@@ -76,11 +64,11 @@ public class Mainfile {
 
     /**
      * Method to shuffle the provided array.
-     * Note: Taken from previous lab, 100OrBust, modified by Tully
+     * Note: Taken from previous lab, 100OrBust
      *
      * @param array array to shuffle.
      */
-    private static void shuffleNames(String[] array) {
+    public static void shuffleNames(String[] array) {
 
         for (int y = 0; y < 100; y++) {
             int random1 = (int) (Math.random() * array.length);
@@ -96,8 +84,8 @@ public class Mainfile {
      * Method to find the winner of the game.
      */
     public static void findWinner() {
-        //todo find winner if brains>=13, player has won
-
+        //todo find winner
+        //Returns a String containing the name of the winning player or null if there is no winner yet.
     }
 
 

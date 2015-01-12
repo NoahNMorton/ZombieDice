@@ -4,7 +4,7 @@ package pack1;
 public class YellowZombieDie extends ZombieDie {
 
     public YellowZombieDie(int dieColour) {
-        super(dieColour); //todo Calls YellowZombieDie constructor with the text “Yellow” >help
+        super(dieColour);
     }
 
     void roll() {

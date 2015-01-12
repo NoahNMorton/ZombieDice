@@ -7,9 +7,12 @@ public abstract class ZombieDie {
     public static final int RED = 1, GREEN = 2, YELLOW = 3;
     int dieColour, value;
 
-
     public ZombieDie(int dieColour) {
         this.dieColour = dieColour;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public int getDieColour() {
