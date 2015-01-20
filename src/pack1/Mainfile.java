@@ -38,18 +38,52 @@ public class Mainfile {
                     switch (choice) {
                         case 0: //roll die, and add points to player score. todo >help
                             ZombieDie tempDie1 = zdb.draw();
-                            switch (tempDie1.getDieColour()) {
+                            ZombieDie tempDie2 = zdb.draw();
+
+                            switch (tempDie1.getDieColour()) { //roll of the first die
                                 case ZombieDie.RED:
                                     tempDie1.roll();
+                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                                        totalPoints++;
+                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
+
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT)
+                                    {
+
+                                    }
                                     break;
                                 case ZombieDie.GREEN:
                                     tempDie1.roll();
-                                    break;
-                                case ZombieDie.YELLOW:
-                                    tempDie1.roll();
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points
+                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
                                         totalPoints++;
                                     } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
+
+                                    }
+                                    break;
+                                case ZombieDie.YELLOW:
+
+                                    tempDie1.roll();
+
+                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                                        totalPoints++;
+                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
+
+                                    }
+                                    break;
+                            }
+                            switch (tempDie2.getDieColour()) { //roll of the second die
+                                case ZombieDie.RED:
+                                    tempDie2.roll();
+                                    break;
+                                case ZombieDie.GREEN:
+                                    tempDie2.roll();
+                                    break;
+                                case ZombieDie.YELLOW:
+                                    tempDie2.roll();
+
+                                    if (tempDie2.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                                        totalPoints++;
+                                    } else if (tempDie2.getValue() == ZombieDie.RUNNER) {
 
                                     }
                                     break;
