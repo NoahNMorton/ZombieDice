@@ -41,58 +41,83 @@ public class Mainfile {
                             ZombieDie tempDie2 = zdb.draw();
 
                             switch (tempDie1.getDieColour()) { //roll of the first die
-                                case ZombieDie.RED:
+                                case ZombieDie.RED: //if the die is red
                                     tempDie1.roll();
                                     if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
                                         totalPoints++;
                                     } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
 
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT)
-                                    {
-
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
+                                        turnSuccess = true;
+                                        totalPoints = 0;
                                     }
                                     break;
-                                case ZombieDie.GREEN:
+                                case ZombieDie.GREEN: //if the die is green
                                     tempDie1.roll();
                                     if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
                                         totalPoints++;
                                     } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
 
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
+                                        turnSuccess = true;
+                                        totalPoints = 0;
                                     }
                                     break;
-                                case ZombieDie.YELLOW:
-
+                                case ZombieDie.YELLOW: //if the die is yellow
                                     tempDie1.roll();
-
                                     if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
                                         totalPoints++;
                                     } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
 
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
+                                        turnSuccess = true;
+                                        totalPoints = 0;
                                     }
                                     break;
                             }
                             switch (tempDie2.getDieColour()) { //roll of the second die
                                 case ZombieDie.RED:
                                     tempDie2.roll();
+                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                                        totalPoints++;
+                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
+
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
+                                        turnSuccess = true;
+                                        totalPoints = 0;
+                                    }
+
                                     break;
                                 case ZombieDie.GREEN:
                                     tempDie2.roll();
+
+                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                                        totalPoints++;
+                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
+
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
+                                        turnSuccess = true;
+                                        totalPoints = 0;
+                                    }
                                     break;
                                 case ZombieDie.YELLOW:
                                     tempDie2.roll();
 
-                                    if (tempDie2.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
                                         totalPoints++;
-                                    } else if (tempDie2.getValue() == ZombieDie.RUNNER) {
+                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
 
+                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
+                                        turnSuccess = true;
+                                        totalPoints = 0;
                                     }
                                     break;
                             }
-                            //maybe write ifs to check colour of draw, then run roll method of respective die todo >check
+
                             break;
                         case 1: //exit and keep points.
                             playerScores[i] += totalPoints;
-                            break;
+                            turnSuccess = true;
                         case 3: //secret cheat to view scores of current player
                             System.out.println("Player " + currentPlayer + " has a score of " + playerScores[i]);
                             break;
@@ -101,10 +126,9 @@ public class Mainfile {
                             break;
                     }
                 }
-                findWinner();
+                findWinner(playerNames, playerScores);
 
             }
-
         }
     }
 
@@ -129,8 +153,14 @@ public class Mainfile {
     /**
      * Method to find the winner of the game.
      */
-    public static void findWinner() {
+    public static void findWinner(String[] playerNames, int[] playerScores) {
         //todo find winner if brains>=13, player has won
+        for (int i = 0; i < playerNames.length; i++) {
+            if (playerScores[i] >= 13) {
+                System.out.println("Player " + playerNames[i] + " has won.");
+                System.exit(0);
+            }
+        }
 
     }
 
