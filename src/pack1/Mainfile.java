@@ -1,6 +1,8 @@
 package pack1;
 
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Mainfile {
@@ -24,97 +26,61 @@ public class Mainfile {
         ZombieDiceBucket zdb = new ZombieDiceBucket();
         zdb.loadBucket();
         //todo play game >might need slight help
-
+        ArrayList<ZombieDie> rolledDice = new ArrayList<ZombieDie>();
         while (true) {
+
             for (int i = 0; i < playersAmt; i++) { //turn incrementer
+
                 int totalPoints = 0; //points to be added to the player at end of turn.
                 boolean turnSuccess = false;
-
+                int amtDieRolled = 0;
                 while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
-                    String currentPlayer = playerNames[i]; //the player with the current turn
+                    String currentPlayer = playerNames[i]; //the player with the current turn.
                     System.out.println("Total brains accumulated: " + totalPoints);
                     System.out.println("Player " + currentPlayer + ", Would you like to roll(0), or stop(1)?");
                     int choice = input.nextInt();
                     switch (choice) {
                         case 0: //roll die, and add points to player score. todo >help
-                            ZombieDie tempDie1 = zdb.draw();
-                            ZombieDie tempDie2 = zdb.draw();
+                        int amtRunners = 0;
 
-                            switch (tempDie1.getDieColour()) { //roll of the first die
-                                case ZombieDie.RED: //if the die is red
-                                    tempDie1.roll();
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
-                                        totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
-                                        turnSuccess = true;
-                                        totalPoints = 0;
-                                    }
-                                    break;
-                                case ZombieDie.GREEN: //if the die is green
-                                    tempDie1.roll();
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
-                                        totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
-                                        turnSuccess = true;
-                                        totalPoints = 0;
-                                    }
-                                    break;
-                                case ZombieDie.YELLOW: //if the die is yellow
-                                    tempDie1.roll();
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
-                                        totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
-                                        turnSuccess = true;
-                                        totalPoints = 0;
-                                    }
-                                    break;
+                            //gather dice
+                            if(amtDieRolled <3)
+                            {
+                                if(amtRunners>0)
+                                {
+                                    amtDieRolled+=amtRunners;
+                                }
+                                else
+                                while (rolledDice.size()<3)
+                                {
+                                    rolledDice.add(zdb.draw());
+                                }
                             }
-                            switch (tempDie2.getDieColour()) { //roll of the second die
-                                case ZombieDie.RED:
-                                    tempDie2.roll();
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
+                            //check what the rolled values are. todo actually roll the dice
+                            for(int h = 0; h<rolledDice.size(); h++)
+                            {
+                                switch (rolledDice.get(h).getValue())
+                                {
+                                    case ZombieDie.BRAIN:
                                         totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
-                                        turnSuccess = true;
-                                        totalPoints = 0;
-                                    }
-
-                                    break;
-                                case ZombieDie.GREEN:
-                                    tempDie2.roll();
-
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
-                                        totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
-                                        turnSuccess = true;
-                                        totalPoints = 0;
-                                    }
-                                    break;
-                                case ZombieDie.YELLOW:
-                                    tempDie2.roll();
-
-                                    if (tempDie1.getValue() == ZombieDie.BRAIN) { //if the rolled value is a brain, add points.
-                                        totalPoints++;
-                                    } else if (tempDie1.getValue() == ZombieDie.RUNNER) {
-
-                                    } else if (tempDie1.getValue() == ZombieDie.SHOT) {
-                                        turnSuccess = true;
-                                        totalPoints = 0;
-                                    }
-                                    break;
+                                        break;
+                                    case ZombieDie.SHOT:
+                                        if(amtDieRolled>=3)
+                                        {
+                                            totalPoints=0;
+                                            turnSuccess=true;
+                                        }
+                                        break;
+                                    case ZombieDie.RUNNER:
+                                        amtRunners++;
+                                        break;
+                                }
                             }
 
-                            break;
+
+
+
+
                         case 1: //exit and keep points.
                             playerScores[i] += totalPoints;
                             turnSuccess = true;

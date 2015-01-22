@@ -7,6 +7,10 @@ public abstract class ZombieDie {
     public static final int RED = 1, GREEN = 2, YELLOW = 3;
     int dieColour, value;
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public ZombieDie(int dieColour) {
         this.dieColour = dieColour;
     }
