@@ -1,7 +1,6 @@
 package pack1;
 
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,44 +30,45 @@ public class Mainfile {
 
             for (int i = 0; i < playersAmt; i++) { //turn incrementer
 
-                int totalPoints = 0; //points to be added to the player at end of turn.
+                int tempBrains = 0; //points to be added to the player at end of turn.
                 boolean turnSuccess = false;
                 int amtDieRolled = 0;
+                int amtRunners = 0;
+                int amtShots = 0;
                 while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
                     String currentPlayer = playerNames[i]; //the player with the current turn.
-                    System.out.println("Total brains accumulated: " + totalPoints);
+                    System.out.println("Total brains accumulated: " + tempBrains);
                     System.out.println("Player " + currentPlayer + ", Would you like to roll(0), or stop(1)?");
                     int choice = input.nextInt();
                     switch (choice) {
                         case 0: //roll die, and add points to player score. todo >help
-                        int amtRunners = 0;
+
 
                             //gather dice
-                            if(amtDieRolled <3)
-                            {
-                                if(amtRunners>0)
-                                {
-                                    amtDieRolled+=amtRunners;
-                                }
-                                else
-                                while (rolledDice.size()<3)
-                                {
-                                    rolledDice.add(zdb.draw());
+                            if (amtDieRolled < 3) {
+                                if (amtRunners > 0) {
+                                    amtDieRolled += amtRunners;
+                                } else {
+                                    if (zdb.draw() != null) //if dice bucket is not empty
+                                        while (rolledDice.size() < 3) {
+                                            rolledDice.add(zdb.draw());
+                                        }
                                 }
                             }
-                            //check what the rolled values are. todo actually roll the dice
-                            for(int h = 0; h<rolledDice.size(); h++)
-                            {
-                                switch (rolledDice.get(h).getValue())
-                                {
+                            amtDieRolled = rolledDice.size();
+                            //check what the rolled values are.
+                            for (ZombieDie aRolledDice : rolledDice) aRolledDice.roll(); //roll all dice
+
+                            for (ZombieDie aRolledDice : rolledDice) {
+                                switch (aRolledDice.getValue()) {
                                     case ZombieDie.BRAIN:
-                                        totalPoints++;
+                                        tempBrains++;
                                         break;
                                     case ZombieDie.SHOT:
-                                        if(amtDieRolled>=3)
-                                        {
-                                            totalPoints=0;
-                                            turnSuccess=true;
+                                        amtShots++;
+                                        if (amtShots >= 3) {
+                                            tempBrains = 0;
+                                            turnSuccess = true;
                                         }
                                         break;
                                     case ZombieDie.RUNNER:
@@ -77,13 +77,11 @@ public class Mainfile {
                                 }
                             }
 
-
-
-
-
+                            break;
                         case 1: //exit and keep points.
-                            playerScores[i] += totalPoints;
+                            playerScores[i] += tempBrains;
                             turnSuccess = true;
+                            break;
                         case 3: //secret cheat to view scores of current player
                             System.out.println("Player " + currentPlayer + " has a score of " + playerScores[i]);
                             break;
@@ -120,7 +118,6 @@ public class Mainfile {
      * Method to find the winner of the game.
      */
     public static void findWinner(String[] playerNames, int[] playerScores) {
-        //todo find winner if brains>=13, player has won
         for (int i = 0; i < playerNames.length; i++) {
             if (playerScores[i] >= 13) {
                 System.out.println("Player " + playerNames[i] + " has won.");

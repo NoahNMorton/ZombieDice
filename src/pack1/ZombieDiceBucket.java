@@ -11,7 +11,7 @@ public class ZombieDiceBucket {
     }
 
     void loadBucket() {
-        //Clears dice and then loads 6 green dice, 4 yellow dice and 3 red dice. todo check
+        //Clears dice and then loads 6 green dice, 4 yellow dice and 3 red dice.
         dice.clear();
 
         dice.add(new RedZombieDie(ZombieDie.RED));
@@ -37,7 +37,7 @@ public class ZombieDiceBucket {
             return dice.remove((int) (Math.random() * dice.size()));
         else
             return null;
-        //Removes and returns 1 random die or null when the bucket is empty. todo check
+        //Removes and returns 1 random die or null when the bucket is empty.
     }
 
 
