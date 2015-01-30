@@ -1,6 +1,7 @@
 package pack1;
 
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,6 +36,7 @@ public class Mainfile {
                 int amtDieRolled = 0;
                 int amtRunners = 0;
                 int amtShots = 0;
+                rolledDice.clear();
                 while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
                     String currentPlayer = playerNames[i]; //the player with the current turn.
                     System.out.println("Total brains accumulated: " + tempBrains);
@@ -45,16 +47,18 @@ public class Mainfile {
 
 
                             //gather dice
-                            if (amtDieRolled < 3) {
-                                if (amtRunners > 0) {
-                                    amtDieRolled += amtRunners;
-                                } else {
-                                    if (zdb.draw() != null) //if dice bucket is not empty
-                                        while (rolledDice.size() < 3) {
-                                            rolledDice.add(zdb.draw());
-                                        }
-                                }
+
+                            if (amtRunners > 0) {
+                                amtDieRolled += amtRunners;
+                                amtRunners -= rerollDice(rolledDice);
+
+                            } else {
+                                if (zdb.draw() != null) //if dice bucket is not empty
+                                    while (rolledDice.size() < 3) {
+                                        rolledDice.add(zdb.draw());
+                                    }
                             }
+
                             amtDieRolled = rolledDice.size();
                             //check what the rolled values are.
                             for (ZombieDie aRolledDice : rolledDice) aRolledDice.roll(); //roll all dice
@@ -66,9 +70,11 @@ public class Mainfile {
                                         break;
                                     case ZombieDie.SHOT:
                                         amtShots++;
+
                                         if (amtShots >= 3) {
                                             tempBrains = 0;
                                             turnSuccess = true;
+                                            JOptionPane.showMessageDialog(null, "Player has died. score reset");
                                         }
                                         break;
                                     case ZombieDie.RUNNER:
@@ -125,6 +131,18 @@ public class Mainfile {
             }
         }
 
+    }
+
+    public static int rerollDice(ArrayList<ZombieDie> dice) {
+        int amtRerolled = 0;
+
+        for (int i = 0; i < dice.size(); i++) {
+            if (dice.get(i).getValue() == 1) {
+                dice.get(i).roll();
+                amtRerolled++;
+            }
+        }
+        return amtRerolled;
     }
 
 
