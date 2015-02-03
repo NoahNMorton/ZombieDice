@@ -9,11 +9,18 @@ public class Mainfile {
 
     public static void main(String[] args) {
 
-        Scanner input = new Scanner(System.in);
-        System.out.println("Please enter the amount of players. 2-5");
-        int playersAmt = input.nextInt();
-        if (playersAmt < 2) playersAmt = 2; //set upwards if below threshold.
-        if (playersAmt > 5) playersAmt = 5; //set downwards if above threshold.
+        Scanner input = null;
+        int playersAmt = 0;
+        try {
+            input = new Scanner(System.in);
+            System.out.println("Please enter the amount of players. 2-5");
+            playersAmt = input.nextInt();
+            if (playersAmt < 2) playersAmt = 2; //set upwards if below threshold.
+            if (playersAmt > 5) playersAmt = 5; //set downwards if above threshold.
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error. Please only enter an integer.");
+        }
 
         String[] playerNames = new String[playersAmt]; //create the arrays of names and scores.
         int[] playerScores = new int[playersAmt];
@@ -24,18 +31,22 @@ public class Mainfile {
         }
         shuffleNames(playerNames); //call shuffle to shuffle names.
         ZombieDiceBucket zdb = new ZombieDiceBucket();
-        zdb.loadBucket();
+        zdb.loadBucket(); //todo should reload bucket after each turn?
         //todo play game >might need slight help
         ArrayList<ZombieDie> rolledDice = new ArrayList<ZombieDie>();
+        ArrayList<ZombieDie> runners = new ArrayList<ZombieDie>();
+        ArrayList<ZombieDie> shots = new ArrayList<ZombieDie>();
+
         while (true) {
 
             for (int i = 0; i < playersAmt; i++) { //turn incrementer
 
                 int tempBrains = 0; //points to be added to the player at end of turn.
                 boolean turnSuccess = false;
-                int amtDieRolled = 0;
-                int amtRunners = 0;
-                int amtShots = 0;
+
+                //clear all arrayLists after turn. todo yes?
+                runners.clear();
+                shots.clear();
                 rolledDice.clear();
                 while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
                     String currentPlayer = playerNames[i]; //the player with the current turn.
@@ -45,12 +56,9 @@ public class Mainfile {
                     switch (choice) {
                         case 0: //roll die, and add points to player score. todo >help
 
-
                             //gather dice
-
-                            if (amtRunners > 0) {
-                                amtDieRolled += amtRunners;
-                                amtRunners -= rerollDice(rolledDice);
+                            if (runners.size() > 0) {
+                                rerollDice(rolledDice, runners); //reroll dice in runners
 
                             } else {
                                 if (zdb.draw() != null) //if dice bucket is not empty
@@ -59,26 +67,26 @@ public class Mainfile {
                                     }
                             }
 
-                            amtDieRolled = rolledDice.size();
                             //check what the rolled values are.
                             for (ZombieDie aRolledDice : rolledDice) aRolledDice.roll(); //roll all dice
 
-                            for (ZombieDie aRolledDice : rolledDice) {
-                                switch (aRolledDice.getValue()) {
-                                    case ZombieDie.BRAIN:
+                            for (int p = 0; p < rolledDice.size(); p++) {
+                                switch (rolledDice.get(p).getValue()) {
+                                    case ZombieDie.BRAIN: //value 2
                                         tempBrains++;
                                         break;
-                                    case ZombieDie.SHOT:
-                                        amtShots++;
+                                    case ZombieDie.SHOT: //value 3
+                                        shots.add(rolledDice.remove(p));
 
-                                        if (amtShots >= 3) {
+                                        if (shots.size() >= 3) { //if 3 shots have accumulated
                                             tempBrains = 0;
                                             turnSuccess = true;
                                             JOptionPane.showMessageDialog(null, "Player has died. score reset");
+                                            //after this, shots should clear itself, todo perhaps add back to rolledDice
                                         }
                                         break;
-                                    case ZombieDie.RUNNER:
-                                        amtRunners++;
+                                    case ZombieDie.RUNNER: //value 1
+                                        runners.add(rolledDice.remove(p)); //add rolled runner to runner arrayList
                                         break;
                                 }
                             }
@@ -133,16 +141,17 @@ public class Mainfile {
 
     }
 
-    public static int rerollDice(ArrayList<ZombieDie> dice) {
-        int amtRerolled = 0;
-
-        for (int i = 0; i < dice.size(); i++) {
-            if (dice.get(i).getValue() == 1) {
-                dice.get(i).roll();
-                amtRerolled++;
-            }
+    /**
+     * Method to reroll the arrayList of runners.
+     *
+     * @param dice    the main arrayList of rolledDice.
+     * @param runners the array of runners.
+     */
+    public static void rerollDice(ArrayList<ZombieDie> dice, ArrayList<ZombieDie> runners) {
+        for (int i = 0; i < runners.size(); i++) { //go through runners, roll each, and transfer back to dice
+            runners.get(i).roll();
+            dice.add(runners.remove(i));
         }
-        return amtRerolled;
     }
 
 
