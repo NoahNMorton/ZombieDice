@@ -1,7 +1,6 @@
 package pack1;
 
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,29 +10,48 @@ public class Mainfile {
 
         Scanner input = null;
         int playersAmt = 0;
-        try {
-            input = new Scanner(System.in);
-            System.out.println("Please enter the amount of players. 2-5");
-            playersAmt = input.nextInt();
-            if (playersAmt < 2) playersAmt = 2; //set upwards if below threshold.
-            if (playersAmt > 5) playersAmt = 5; //set downwards if above threshold.
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error. Please only enter an integer.");
+        boolean argValid = false;
+
+        while (true) {
+            try {
+                input = new Scanner(System.in);
+                System.out.println("Please enter the amount of players. 2-5");
+                playersAmt = input.nextInt();
+                if (playersAmt < 2) playersAmt = 2; //set upwards if below threshold.
+                if (playersAmt > 5) playersAmt = 5; //set downwards if above threshold.
+                break;
+            } catch (Exception e) {
+                System.err.println("Error. Please only enter an integer.");
+            }
         }
 
         String[] playerNames = new String[playersAmt]; //create the arrays of names and scores.
         int[] playerScores = new int[playersAmt];
 
-        for (int e = 0; e < playersAmt; e++) { //receive all players' names.
-            System.out.println("Please enter the name for player " + e);
-            playerNames[e] = input.next();
+        try {
+            if (args[0] != null && args[1] != null) { //tries to receive names from args
+                playerNames[0] = args[0];
+                playerNames[1] = args[1];
+                argValid = true;
+                if (playersAmt > 2)
+                    System.err.println("Warning: Playing with more than 2 players in test mode, \nThings may not work.");
+            }
+        } catch (Exception e) {
         }
+
+
+        if (!argValid) { //if args are not valid, will get names from user
+            for (int e = 0; e < playersAmt; e++) { //receive all players' names.
+                System.out.println("Please enter the name for player " + e);
+                playerNames[e] = input.next();
+            }
+        }
+
         shuffleNames(playerNames); //call shuffle to shuffle names.
         ZombieDiceBucket zdb = new ZombieDiceBucket();
-        zdb.loadBucket(); //todo should reload bucket after each turn?
+        zdb.loadBucket(); //todo should reload bucket after each turn? Seems like bucket will run out mid game
         //todo play game >might need slight help
-        ArrayList<ZombieDie> rolledDice = new ArrayList<ZombieDie>();
+        ArrayList<ZombieDie> rolledDice = new ArrayList<ZombieDie>(); //the rolled dice array, holds all the dice that are on the figurative "table"
         ArrayList<ZombieDie> runners = new ArrayList<ZombieDie>();
         ArrayList<ZombieDie> shots = new ArrayList<ZombieDie>();
 
@@ -81,7 +99,7 @@ public class Mainfile {
                                         if (shots.size() >= 3) { //if 3 shots have accumulated
                                             tempBrains = 0;
                                             turnSuccess = true;
-                                            JOptionPane.showMessageDialog(null, "Player has died. score reset");
+
                                             //after this, shots should clear itself, todo perhaps add back to rolledDice
                                         }
                                         break;
@@ -130,6 +148,9 @@ public class Mainfile {
 
     /**
      * Method to find the winner of the game.
+     *
+     * @param playerNames  arrayList of player names
+     * @param playerScores arrayList of player scores
      */
     public static void findWinner(String[] playerNames, int[] playerScores) {
         for (int i = 0; i < playerNames.length; i++) {
@@ -148,6 +169,7 @@ public class Mainfile {
      * @param runners the array of runners.
      */
     public static void rerollDice(ArrayList<ZombieDie> dice, ArrayList<ZombieDie> runners) {
+
         for (int i = 0; i < runners.size(); i++) { //go through runners, roll each, and transfer back to dice
             runners.get(i).roll();
             dice.add(runners.remove(i));

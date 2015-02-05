@@ -29,4 +29,8 @@ public abstract class ZombieDie {
 
     abstract void roll(); //randomly set value based on dieColour
 
+    @Override
+    public String toString() {
+        return "Dice colour: " + dieColour + " Die Value: " + value;
+    }
 }
