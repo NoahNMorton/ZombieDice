@@ -31,6 +31,18 @@ public abstract class ZombieDie {
 
     @Override
     public String toString() {
-        return "Dice colour: " + dieColour + " Die Value: " + value;
+        String temp_value = "";
+        switch (value) {
+            case 1:
+                temp_value = "Runner";
+                break;
+            case 2:
+                temp_value = "Brain";
+                break;
+            case 3:
+                temp_value = "Shot";
+                break;
+        }
+        return "Dice colour: " + dieColour + " Die Value: " + temp_value;
     }
 }

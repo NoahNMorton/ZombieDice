@@ -8,7 +8,7 @@ public class RedZombieDie extends ZombieDie {
     }
 
     void roll() {
-        int random = ((int) (Math.random() * 6));
+        int random = ((int) (Math.random() * 6) + 1);
         if (random <= 2) //2runner
         {
             value = ZombieDie.RUNNER;//set value
@@ -19,8 +19,6 @@ public class RedZombieDie extends ZombieDie {
         {
             value = ZombieDie.SHOT; //set value
         }
-
     }
-
 
 }

@@ -36,7 +36,7 @@ public class Mainfile {
                 if (playersAmt > 2)
                     System.err.println("Warning: Playing with more than 2 players in test mode, \nThings may not work.");
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) { //if args are not valid, simply skip them
         }
 
 
@@ -55,6 +55,7 @@ public class Mainfile {
         ArrayList<ZombieDie> runners = new ArrayList<ZombieDie>();
         ArrayList<ZombieDie> shots = new ArrayList<ZombieDie>();
 
+        //noinspection InfiniteLoopStatement
         while (true) {
 
             for (int i = 0; i < playersAmt; i++) { //turn incrementer
@@ -66,6 +67,7 @@ public class Mainfile {
                 runners.clear();
                 shots.clear();
                 rolledDice.clear();
+                zdb.loadBucket();
                 while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
                     String currentPlayer = playerNames[i]; //the player with the current turn.
                     System.out.println("Total brains accumulated: " + tempBrains);
@@ -94,7 +96,7 @@ public class Mainfile {
                                         tempBrains++;
                                         break;
                                     case ZombieDie.SHOT: //value 3
-                                        shots.add(rolledDice.remove(p));
+                                        shots.add(rolledDice.remove(p)); //transfer die from rolledDice to shots
 
                                         if (shots.size() >= 3) { //if 3 shots have accumulated
                                             tempBrains = 0;
@@ -118,12 +120,11 @@ public class Mainfile {
                             System.out.println("Player " + currentPlayer + " has a score of " + playerScores[i]);
                             break;
                         default:
-                            System.out.println("Invalid choice. Please enter a 0 or 1.");
+                            System.err.println("Invalid choice. Please enter a 0 or 1.");
                             break;
                     }
                 }
-                findWinner(playerNames, playerScores);
-
+                findWinner(playerNames, playerScores); //call findWinner to find the winner and end the program.
             }
         }
     }
