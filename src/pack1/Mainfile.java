@@ -49,11 +49,11 @@ public class Mainfile {
 
         shuffleNames(playerNames); //call shuffle to shuffle names.
         ZombieDiceBucket zdb = new ZombieDiceBucket();
-        zdb.loadBucket(); //todo should reload bucket after each turn? Seems like bucket will run out mid game
-        //todo play game >might need slight help
+        zdb.loadBucket();
         ArrayList<ZombieDie> rolledDice = new ArrayList<ZombieDie>(); //the rolled dice array, holds all the dice that are on the figurative "table"
         ArrayList<ZombieDie> runners = new ArrayList<ZombieDie>();
         ArrayList<ZombieDie> shots = new ArrayList<ZombieDie>();
+        ArrayList<ZombieDie> brains = new ArrayList<ZombieDie>();
 
         //noinspection InfiniteLoopStatement
         while (true) {
@@ -63,18 +63,20 @@ public class Mainfile {
                 int tempBrains = 0; //points to be added to the player at end of turn.
                 boolean turnSuccess = false;
 
-                //clear all arrayLists after turn. todo yes?
+                //clear all arrayLists after turn.
                 runners.clear();
                 shots.clear();
                 rolledDice.clear();
+                brains.clear();
                 zdb.loadBucket();
                 while (!turnSuccess) { //while loop will exit at the end of player's turn, if appropriate action was taken.
-                    String currentPlayer = playerNames[i]; //the player with the current turn.
+                    zdb.loadBucket();
+
                     System.out.println("Total brains accumulated: " + tempBrains);
-                    System.out.println("Player " + currentPlayer + ", Would you like to roll(0), or stop(1)?");
+                    System.out.println("Player " + playerNames[i] + ", Would you like to roll(0), or stop(1)?");
                     int choice = input.nextInt();
                     switch (choice) {
-                        case 0: //roll die, and add points to player score. todo >help
+                        case 0: //roll die, and add points to player score.
 
                             //gather dice
                             if (runners.size() > 0) {
@@ -86,30 +88,39 @@ public class Mainfile {
                                         rolledDice.add(zdb.draw());
                                     }
                             }
-
                             //check what the rolled values are.
                             for (ZombieDie aRolledDice : rolledDice) aRolledDice.roll(); //roll all dice
 
                             for (int p = 0; p < rolledDice.size(); p++) {
                                 switch (rolledDice.get(p).getValue()) {
                                     case ZombieDie.BRAIN: //value 2
-                                        tempBrains++;
+                                        brains.add(rolledDice.remove(p));
+                                        p--;
+                                        tempBrains = brains.size();
                                         break;
                                     case ZombieDie.SHOT: //value 3
                                         shots.add(rolledDice.remove(p)); //transfer die from rolledDice to shots
-
+                                        p--;
                                         if (shots.size() >= 3) { //if 3 shots have accumulated
                                             tempBrains = 0;
+                                            brains.clear();
                                             turnSuccess = true;
-
-                                            //after this, shots should clear itself, todo perhaps add back to rolledDice
+                                            System.out.println("\n\n\n\nIt seems you got shot 3 times, ending your turn. Sorry mate.");
                                         }
                                         break;
                                     case ZombieDie.RUNNER: //value 1
                                         runners.add(rolledDice.remove(p)); //add rolled runner to runner arrayList
+                                        p--;
                                         break;
                                 }
                             }
+                            System.out.println("Turn Summary:");
+                            System.out.println("Runners:");
+                            System.out.println(runners);
+                            System.out.println("Brains:");
+                            System.out.println(brains);
+                            System.out.println("Shots:");
+                            System.out.println(shots);
 
                             break;
                         case 1: //exit and keep points.
@@ -117,7 +128,7 @@ public class Mainfile {
                             turnSuccess = true;
                             break;
                         case 3: //secret cheat to view scores of current player
-                            System.out.println("Player " + currentPlayer + " has a score of " + playerScores[i]);
+                            System.out.println("Player " + playerNames[i] + " has a score of " + playerScores[i]);
                             break;
                         default:
                             System.err.println("Invalid choice. Please enter a 0 or 1.");

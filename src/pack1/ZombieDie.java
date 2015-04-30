@@ -31,7 +31,7 @@ public abstract class ZombieDie {
 
     @Override
     public String toString() {
-        String temp_value = "";
+        String temp_value = "", temp_value2 = "";
         switch (value) {
             case 1:
                 temp_value = "Runner";
@@ -43,6 +43,20 @@ public abstract class ZombieDie {
                 temp_value = "Shot";
                 break;
         }
-        return "Dice colour: " + dieColour + " Die Value: " + temp_value;
+        switch (dieColour) {
+            case 1:
+                temp_value2 = "Red";
+                break;
+            case 2:
+                temp_value2 = "Green";
+                break;
+            case 3:
+                temp_value2 = "Yellow";
+                break;
+        }
+        if (value == NOT_ROLLED)
+            return temp_value2;
+        else
+            return temp_value2 + "-" + temp_value;
     }
 }
